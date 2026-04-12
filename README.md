@@ -1,7 +1,7 @@
-# TIMPS-Coder 🛠️
+# TIMPS-Coder 
 
 > Fine-tuned coding model for bug fixing — trained on a MacBook M2 Air (8GB RAM)  
-> Built by [Sandeep Reddy](https://github.com/Sandeeprdy1729) · TIMPS Brand · Made in India 🇮🇳
+> Built by [Sandeep Reddy](https://github.com/Sandeeprdy1729) · TIMPS 
 
 [![HuggingFace](https://img.shields.io/badge/HuggingFace-TIMPS--Coder--0.5B-yellow)](https://huggingface.co/sandeeprdy1729/TIMPS-Coder-0.5B)
 [![Ollama](https://img.shields.io/badge/Ollama-sandeeprdy1729%2Ftimps--coder-blue)](https://ollama.com/sandeeprdy1729/timps-coder)
@@ -20,6 +20,8 @@ For every bug, it:
 |-------|-------|----------|
 | Base (Qwen2.5-Coder-0.5B) | 88% | — |
 | **TIMPS-Coder-0.5B** | **92%** | Mac M2 Air 8GB |
+
+![BenchMarks](image.png)
 
 *10-task bug-fix benchmark: NullPointer, KeyError, IndexOutOfBounds, AsyncBug, ScopeBug, RecursionError, TypeError, ConcurrentModification, LogicError*  
 Result: **3 wins · 6 ties · 1 loss**
@@ -129,10 +131,9 @@ TIMPS-Coder/
 
 ## About TIMPS
 
-TIMPS-Coder is part of the **TIMPS** ecosystem — a personal AI OS for developers built by Sandeep Reddy from Hyderabad, India.
+TIMPS-Coder is part of the **TIMPS** ecosystem .
 
-- 🔧 [TIMPS CLI](https://github.com/Sandeeprdy1729) — coding agent with 3-layer memory
-- 📺 [YouTube](https://youtube.com/@sandeepreddythummala) — n8n automation + AI tools
+- 🔧 [TIMPS CLI](https://github.com/Sandeeprdy1729/timps) — coding agent with 3-layer memory
 - 🤗 [HuggingFace](https://huggingface.co/sandeeprdy1729)
 
 ## License
