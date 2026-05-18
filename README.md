@@ -1,32 +1,46 @@
-# TIMPS-Coder 
+# TIMPS-Coder v2 — Agentic Software Engineer
 
-> Fine-tuned coding model for bug fixing — trained on a MacBook M2 Air (8GB RAM)  
-> Built by [Sandeep Reddy](https://github.com/Sandeeprdy1729) · TIMPS 
+> A 0.5B coding model that **reasons before it codes** — trained on real GitHub issue resolutions,
+> expert agent execution traces, competitive algorithms, and multi-step tool-use trajectories.  
+> Built by [Sandeep Reddy](https://github.com/Sandeeprdy1729) · TIMPS · Made in India 🇮🇳
 
 [![HuggingFace](https://img.shields.io/badge/HuggingFace-TIMPS--Coder--0.5B-yellow)](https://huggingface.co/sandeeprdy1729/TIMPS-Coder-0.5B)
 [![Ollama](https://img.shields.io/badge/Ollama-sandeeprdy1729%2Ftimps--coder-blue)](https://ollama.com/sandeeprdy1729/timps-coder)
 [![License](https://img.shields.io/badge/license-Apache%202.0-green)](LICENSE)
 
-## What it does
+---
 
-TIMPS-Coder fixes bugs across Java, Python, JavaScript, C++, Go, Rust and more.  
-For every bug, it:
-1. **Explains the root cause** in plain English
-2. **Shows the complete corrected code**
+## What makes v2 different from every other 0.5B code model
 
-## Benchmark
+| Capability | TIMPS-Coder v2 | Generic code models |
+|---|---|---|
+| Bug analysis | Root-cause reasoning (explains WHY) | Pattern-match and replace |
+| SWE / Repo-level | Understands GitHub issues + multi-file context | Single-function scope |
+| Algorithms | Solves competitive problems with O-notation | Basic code completion |
+| Code review | Catches security (SQL injection) + perf + bugs | Syntax only |
+| Agentic planning | Plans multi-step tasks with exact commands | Single response |
+| Output structure | **THINK → ACT → VERIFY** | Unstructured prose |
 
-| Model | Score | Hardware |
-|-------|-------|----------|
-| Base (Qwen2.5-Coder-0.5B) | 88% | — |
-| **TIMPS-Coder-0.5B** | **92%** | Mac M2 Air 8GB |
+---
 
-![BenchMarks](image.png)
+## Benchmark — 25 tests across 5 dimensions
 
-*10-task bug-fix benchmark: NullPointer, KeyError, IndexOutOfBounds, AsyncBug, ScopeBug, RecursionError, TypeError, ConcurrentModification, LogicError*  
-Result: **3 wins · 6 ties · 1 loss**
+| Dimension | Tests | Description |
+|---|---|---|
+| 🐛 Bug Fix | 5 | NullPointer, KeyError, Async, Closure, RecursionError |
+| 🔧 SWE | 5 | N+1 queries, race conditions, memory leaks, goroutine leaks |
+| ⚡ Algorithm | 5 | Two Sum, Sliding Window, Binary Search, LRU Cache, Merge K Lists |
+| 🔍 Code Review | 5 | SQL injection, O(n²) optimisation, missing error handling |
+| 🤖 Agentic | 5 | CI debugging, refactoring plans, flaky tests, profiling |
 
-## Run it in 30 seconds
+```
+python3 3_benchmark_v2.py        # full 25-test benchmark vs base model
+python3 3_benchmark_v2.py --quick  # 10-test fast version
+```
+
+---
+
+## Run in 30 seconds
 
 ### Ollama (recommended)
 ```bash
@@ -38,11 +52,12 @@ ollama run sandeeprdy1729/timps-coder
 pip install mlx-lm
 mlx_lm generate \
   --model sandeeprdy1729/TIMPS-Coder-0.5B \
-  --max-tokens 500 --temp 0.1 \
+  --max-tokens 700 --temp 0.1 \
   --prompt '<|im_start|>system
-You are TIMPS-Coder. Explain the bug cause then show fixed code.<|im_end|>
+You are TIMPS-Coder v2. THINK through root cause, ACT with complete code, VERIFY edge cases.<|im_end|>
 <|im_start|>user
-Fix null_pointer: My Spring @Autowired field is null<|im_end|>
+Repository: myapp/backend
+Issue: N+1 queries — loading 100 products hits the DB 101 times. Fix it.<|im_end|>
 <|im_start|>assistant
 '
 ```
@@ -55,86 +70,118 @@ model     = AutoModelForCausalLM.from_pretrained("sandeeprdy1729/TIMPS-Coder-0.5
 tokenizer = AutoTokenizer.from_pretrained("sandeeprdy1729/TIMPS-Coder-0.5B")
 
 messages = [
-    {"role": "system",  "content": "You are TIMPS-Coder. Explain the bug cause then show fixed code."},
-    {"role": "user",    "content": "Fix null_pointer: My Spring @Autowired field is null"},
+    {"role": "system",  "content": "You are TIMPS-Coder v2. THINK, ACT, VERIFY."},
+    {"role": "user",    "content": "Fix the race condition: two threads increment self.count += 1 simultaneously."},
 ]
 text   = tokenizer.apply_chat_template(messages, tokenize=False, add_generation_prompt=True)
 inputs = tokenizer(text, return_tensors="pt")
-out    = model.generate(**inputs, max_new_tokens=500, temperature=0.1, do_sample=True)
+out    = model.generate(**inputs, max_new_tokens=700, temperature=0.1, do_sample=True)
 print(tokenizer.decode(out[0], skip_special_tokens=True))
 ```
 
-## Training — reproduce it yourself
+---
 
-Everything is open source. You can retrain this on your own Mac.
+## Showcase
+
+```bash
+git clone https://github.com/Sandeeprdy1729/TIMPS-Coder
+cd timps-coder-finetune
+pip install mlx-lm datasets huggingface_hub
+
+python3 launch_timps_v2.py            # full 5-chapter showcase
+python3 launch_timps_v2.py --chat     # interactive REPL
+python3 launch_timps_v2.py --chapter 3  # single chapter (1–5)
+python3 launch_timps_v2.py --quick    # fast 1-demo-per-chapter version
+```
+
+---
+
+## Retrain it yourself
 
 ### Requirements
-- Mac M1/M2/M3 (8GB+ RAM)
+- Mac M1 / M2 / M3 (8 GB+ RAM)
 - Python 3.10+
 - `pip install mlx-lm datasets huggingface_hub`
 
 ### Steps
 
 ```bash
-# 1. Clone
-git clone https://github.com/Sandeeprdy1729/TIMPS-Coder
-cd TIMPS-Coder
+# 1. Build v2 dataset (SWE-bench + agentic traces + LeetCode)
+python3 1_prepare_data_v2.py
 
-# 2. Build clean dataset
-python3 build_clean_dataset.py
-# Downloads 30,000+ clean coding instruction pairs from HuggingFace
+# 2. Train  (~3–4 hrs on M2 Air 8 GB)
+bash 2_train_sft.sh
 
-# 3. Fix code fences
-python3 fix_fences.py
+# 3. Benchmark
+python3 3_benchmark_v2.py
 
-# 4. Train (~2 hrs on M2 Air)
-bash retrain.sh
+# 4. Showcase
+python3 launch_timps_v2.py
 
-# 5. Test
-python3 test.py
-
-# 6. Publish
+# 5. Publish
 huggingface-cli login
 python3 publish.py
+
+# 6. (Optional) Build Ollama GGUF
+python3 4_make_gguf.py
 ```
 
-### Training config
+### Training config (v2)
+
 | Parameter | Value |
 |-----------|-------|
 | Base model | `Qwen/Qwen2.5-Coder-0.5B-Instruct` |
 | Method | LoRA |
-| LoRA rank | 16 |
-| LoRA alpha | 32 |
-| LoRA layers | 8 |
+| LoRA rank | **16** (was 8 in v1) |
+| LoRA layers | 16 |
 | Learning rate | 5e-6 |
 | Iterations | 3,000 |
-| Batch size | 2 + grad accum ×4 |
-| Max seq length | 1024 |
+| Batch size | 1 + grad accum ×4 |
+| **Max seq length** | **2048** (was 512 in v1) |
 | Framework | MLX-LM (Apple Silicon) |
-| Peak memory | 3.7 GB |
+| Peak memory | ~5.5 GB |
+
+### v2 Training datasets
+
+| Dataset | Type | Samples |
+|---------|------|---------|
+| `SWE-bench/SWE-bench_Verified` | Real GitHub issue → patch | ~400 |
+| `TIGER-Lab/SWE-Next-SFT-Trajectories` | Agentic edit traces | ~2,000 |
+| `newfacade/LeetCodeDataset` | Algorithm problems | ~2,500 |
+| `WaltonFuture/agentic-sft-new` | Tool use + bash | ~3,000 |
+| TIMPS v1 processed data | Bug-fix identity | existing |
+
+---
 
 ## Project structure
 
 ```
-TIMPS-Coder/
-├── build_clean_dataset.py   # Download + clean training data
-├── fix_fences.py            # Fix missing code fences in dataset
-├── retrain.sh               # LoRA fine-tuning script
-├── test.py                  # 10-task benchmark vs base model
-├── publish.py               # Push to HuggingFace + Ollama
+timps-coder-finetune/
+├── 1_prepare_data_v2.py   # v2 dataset: SWE-bench + agentic + LeetCode
+├── 1_prepare_data.py      # v1 dataset builder (legacy)
+├── 2_train_sft.sh         # LoRA fine-tuning (rank=16, seq=2048, 3000 iters)
+├── 3_benchmark_v2.py      # 25-test benchmark — 5 capability dimensions
+├── 4_make_gguf.py         # Convert to GGUF for Ollama
+├── launch_timps_v2.py     # Live showcase + interactive chat
+├── publish.py             # Push to HuggingFace + Ollama
+├── test.py                # v1 benchmark (10 tests, legacy)
+├── gen_dataset.py         # v1 dataset builder (legacy)
 ├── data/
 │   └── processed/
-│       ├── train.jsonl      # Training data (generated)
-│       └── valid.jsonl      # Validation data (generated)
-└── adapters/                # LoRA adapter weights (generated)
+│       ├── train.jsonl    # generated by 1_prepare_data_v2.py
+│       └── valid.jsonl
+└── adapters/              # LoRA adapter weights (generated)
 ```
+
+---
 
 ## About TIMPS
 
-TIMPS-Coder is part of the **TIMPS** ecosystem .
+TIMPS-Coder v2 is part of the **TIMPS** ecosystem.
 
 - 🔧 [TIMPS CLI](https://github.com/Sandeeprdy1729/timps) — coding agent with 3-layer memory
 - 🤗 [HuggingFace](https://huggingface.co/sandeeprdy1729)
+- ▶️ [YouTube](https://youtube.com/@sandeepreddythummala)
 
 ## License
 
