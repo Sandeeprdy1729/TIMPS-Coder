@@ -8,6 +8,7 @@
 [![Ollama](https://img.shields.io/badge/Ollama-sandeeprdy1729%2Ftimps--coder-blue)](https://ollama.com/sandeeprdy1729/timps-coder)
 [![License](https://img.shields.io/badge/license-Apache%202.0-green)](LICENSE)
 [![Benchmark](https://img.shields.io/badge/Internal%20Benchmark-88%25%20(44%2F50)-brightgreen)](benchmark_results.json)
+[![Discord](https://img.shields.io/badge/Discord-Join%20Community-5865F2?style=flat&logo=discord&logoColor=white)](https://discord.gg/MmsTNm8WF6)
 
 ---
 
@@ -250,6 +251,7 @@ task through careful fine-tuning and structured training data.
 - GitHub: [Sandeeprdy1729](https://github.com/Sandeeprdy1729)
 - HuggingFace: [sandeeprdy1729](https://huggingface.co/sandeeprdy1729)
 - YouTube: [@sandeepreddythummala](https://youtube.com/@sandeepreddythummala)
+- Discord: [discord.gg/MmsTNm8WF6](https://discord.gg/MmsTNm8WF6)
 
 ---
 
